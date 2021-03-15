@@ -12,7 +12,8 @@ public class DropdownTests extends BaseTests {
     public void testSelectOption(){
         var dropDownPage = homePage.clickDropdownLink();
 
-        String option = "Option 1"; //set up as a variable as used more than once.
+        String option = "Option 1"; //set up as a variable as used more than once. commit test.
+
         dropDownPage.selectFromDropDown(option);//choose option 1 using our variable above
         var selectedOptions = dropDownPage.getSelectedOption(); //get all the selected options
         assertEquals(selectedOptions.size(), 1, "Incorrect number of selections"); //check only one is selected
