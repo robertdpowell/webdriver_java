@@ -32,6 +32,17 @@ public class HomePage {
         return new InputsPage(driver);
     }
 
+    //method to return the corresponding page for a specific link.
+    public HoversPage clickHoversLink(){
+        clickLink("Hovers");
+        return new HoversPage(driver);
+    }
+
+    public KeyPressesPage clickKeyPresses(){
+        clickLink("Key Presses");
+        return new KeyPressesPage(driver);
+    }
+
 
 
 }
