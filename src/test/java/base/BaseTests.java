@@ -1,32 +1,78 @@
 package base;
 
 import Pages.HomePage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import Utils.WindowManager;
+import com.google.common.io.Files;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-//this is a class - remember a class is a template from which we can instantiate objects. So we will instantiate
-//an instance from the class BaseTests and call it something, to do some work.
 public class BaseTests {
-    private WebDriver driver; //our driver
-    protected HomePage homePage; //a page object - protected so test classes that inherit from this will have access to it
+    private EventFiringWebDriver driver;
+    protected HomePage homePage;
 
-    @BeforeClass //setup method that runs before any of the test classes
+    @BeforeClass
     public void setUp(){
-        System.setProperty("webdriver.chrome.driver", "resources/chromedriver");//find my interface tool
-        driver = new ChromeDriver();// instantiate my interface tool
-        driver.get("https://the-internet.herokuapp.com/");//launch website
-        homePage = new HomePage(driver); //provide a handle in our test layer to our application.
+        System.setProperty("webdriver.chrome.driver", "resources/chromedriver");
+        driver = new EventFiringWebDriver(new ChromeDriver(getChromeOptions()));
+        driver.register(new utils.EventReporter());
+        goHome();
+        setCookie();
     }
+
+    @BeforeMethod
+    public void goHome(){
+        driver.get("https://the-internet.herokuapp.com/");
+        homePage = new HomePage(driver);
+    }
+
     @AfterClass
     public void tearDown(){
         driver.quit();
+    }
+
+    @AfterMethod
+    public void recordFailure(ITestResult result){
+
+        if(ITestResult.FAILURE == result.getStatus())
+        {
+            var camera = (TakesScreenshot)driver;
+            File screenshot = camera.getScreenshotAs(OutputType.FILE);
+
+            try{
+                Files.move(screenshot, new File("resources/screenshots/" + result.getName() + ".png"));
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public WindowManager getWindowManager(){
+        return new WindowManager(driver);
+    }
+
+    private ChromeOptions getChromeOptions(){
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("disable-infobars");
+        options.setHeadless(true);
+        return options;
+    }
+
+    private void setCookie(){
+        Cookie cookie = new Cookie.Builder("tau", "123")
+                .domain("the-internet.herokuapp.com")
+                .build();
+        driver.manage().addCookie(cookie);
     }
 }
 

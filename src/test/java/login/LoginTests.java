@@ -1,9 +1,8 @@
-package Login;
+package login;
 
 import Pages.LoginPage;
 import Pages.SecureAreaPage;
 import base.BaseTests;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 

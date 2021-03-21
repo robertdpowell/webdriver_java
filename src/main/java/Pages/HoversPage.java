@@ -7,12 +7,10 @@ import org.openqa.selenium.interactions.Actions;
 
 //our class for this page
 public class HoversPage {
-    //define the fields that we want to use later in our methods
     private WebDriver driver;
-    private By figureBox = By.className("figure"); //defining a field for our class
-    private By boxCaption = By.className("figcaption"); //defining a field for our class
+    private By figureBox = By.className("figure");
+    private By boxCaption = By.className("figcaption");
 
-    //setup the webdriver
     public HoversPage(WebDriver driver){
         this.driver = driver;
     }

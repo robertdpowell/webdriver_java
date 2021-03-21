@@ -1,4 +1,4 @@
-package Dropdown;
+package dropdown;
 
 import base.BaseTests;
 import org.testng.annotations.Test;
